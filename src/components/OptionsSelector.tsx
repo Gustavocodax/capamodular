@@ -21,7 +21,7 @@ interface OptionsSelectorProps {
 export function OptionsSelector({ options, selectedOptions, onToggleOption }: OptionsSelectorProps) {
   const [selectedOptionForDetails, setSelectedOptionForDetails] = useState<Option | null>(null);
 
-  const handleCardClick = (option: Option, e: React.MouseEvent) => {
+  const handleCardClick = (option: Option, e: React.MouseEvent<HTMLDivElement>) => {
     // Se clicar no ícone de info, abre o modal
     const target = e.target as HTMLElement;
     if (target.closest('.info-icon')) {
@@ -56,7 +56,7 @@ export function OptionsSelector({ options, selectedOptions, onToggleOption }: Op
                       id={option.id}
                       checked={isSelected}
                       onCheckedChange={() => onToggleOption(option.id)}
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={(e: React.MouseEvent) => e.stopPropagation()}
                       className="mt-0.5"
                     />
                     
@@ -93,16 +93,16 @@ export function OptionsSelector({ options, selectedOptions, onToggleOption }: Op
         </div>
       </div>
 
-      <Dialog open={!!selectedOptionForDetails} onOpenChange={(open) => !open && setSelectedOptionForDetails(null)}>
+      <Dialog open={!!selectedOptionForDetails} onOpenChange={(open: boolean) => !open && setSelectedOptionForDetails(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-primary">{selectedOptionForDetails?.name}</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-primary break-words">{selectedOptionForDetails?.name}</DialogTitle>
+            <DialogDescription className="break-words">
               Detalhes da opção selecionada
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
-            <p className="text-foreground leading-relaxed">
+            <p className="text-foreground leading-relaxed break-words">
               {selectedOptionForDetails?.description}
             </p>
             <div className="pt-4 border-t border-border">

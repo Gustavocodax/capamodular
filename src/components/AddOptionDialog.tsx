@@ -41,10 +41,13 @@ export function AddOptionDialog({ onAdd }: AddOptionDialogProps) {
 
     try {
       setLoading(true);
+      const priceValue = parseFloat(
+        formData.price.replace('R$', '').replace(/\./g, '').replace(',', '.')
+      );
       await onAdd({
         name: formData.name,
         description: formData.description,
-        price: parseFloat(formData.price),
+        price: priceValue,
       });
       
       // Limpar formulário e fechar dialog
@@ -66,7 +69,7 @@ export function AddOptionDialog({ onAdd }: AddOptionDialogProps) {
           Adicionar Nova Opção
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Adicionar Nova Opção</DialogTitle>
@@ -107,14 +110,18 @@ export function AddOptionDialog({ onAdd }: AddOptionDialogProps) {
               <Label htmlFor="price">Preço (R$)</Label>
               <Input
                 id="price"
-                type="number"
-                step="0.01"
-                min="0"
-                placeholder="0.00"
+                type="text"
+                placeholder="R$ 0,00"
                 value={formData.price}
-                onChange={(e) =>
-                  setFormData({ ...formData, price: e.target.value })
-                }
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '');
+                  const number = parseFloat(value) / 100;
+                  const formatted = number.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  });
+                  setFormData({ ...formData, price: formatted });
+                }}
                 required
               />
             </div>

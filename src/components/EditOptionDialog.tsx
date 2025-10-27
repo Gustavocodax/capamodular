@@ -30,7 +30,10 @@ export function EditOptionDialog({ option, onUpdate }: EditOptionDialogProps) {
   const [formData, setFormData] = useState({
     name: option.name,
     description: option.description,
-    price: option.price.toString(),
+    price: option.price.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }),
   });
 
   // Atualizar form quando a opção mudar
@@ -38,7 +41,10 @@ export function EditOptionDialog({ option, onUpdate }: EditOptionDialogProps) {
     setFormData({
       name: option.name,
       description: option.description,
-      price: option.price.toString(),
+      price: option.price.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+      }),
     });
   }, [option]);
 
@@ -52,10 +58,13 @@ export function EditOptionDialog({ option, onUpdate }: EditOptionDialogProps) {
 
     try {
       setLoading(true);
+      const priceValue = parseFloat(
+        formData.price.replace('R$', '').replace(/\./g, '').replace(',', '.')
+      );
       await onUpdate(option.id, {
         name: formData.name,
         description: formData.description,
-        price: parseFloat(formData.price),
+        price: priceValue,
       });
       
       setOpen(false);
@@ -74,7 +83,7 @@ export function EditOptionDialog({ option, onUpdate }: EditOptionDialogProps) {
           <Pencil className="w-4 h-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Editar Opção</DialogTitle>
@@ -113,13 +122,18 @@ export function EditOptionDialog({ option, onUpdate }: EditOptionDialogProps) {
               <Label htmlFor="edit-price">Preço (R$)</Label>
               <Input
                 id="edit-price"
-                type="number"
-                step="0.01"
-                min="0"
+                type="text"
+                placeholder="R$ 0,00"
                 value={formData.price}
-                onChange={(e) =>
-                  setFormData({ ...formData, price: e.target.value })
-                }
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '');
+                  const number = parseFloat(value) / 100;
+                  const formatted = number.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  });
+                  setFormData({ ...formData, price: formatted });
+                }}
                 required
               />
             </div>

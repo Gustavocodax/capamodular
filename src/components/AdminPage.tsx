@@ -1,8 +1,9 @@
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
-import { Trash2, ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import { AddOptionDialog } from './AddOptionDialog';
 import { EditOptionDialog } from './EditOptionDialog';
+import { DeleteOptionDialog } from './DeleteOptionDialog';
 import { useOptions } from '../hooks/useOptions';
 
 interface AdminPageProps {
@@ -19,16 +20,7 @@ export function AdminPage({ onBack }: AdminPageProps) {
     deleteOption,
   } = useOptions();
 
-  const handleDelete = async (id: string) => {
-    if (confirm('Tem certeza que deseja excluir esta opção?')) {
-      try {
-        await deleteOption(id);
-      } catch (error) {
-        console.error('Erro ao deletar:', error);
-        alert('Erro ao deletar opção. Tente novamente.');
-      }
-    }
-  };
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -100,14 +92,10 @@ export function AdminPage({ onBack }: AdminPageProps) {
                           option={option}
                           onUpdate={updateOption}
                         />
-                        <Button
-                          onClick={() => handleDelete(option.id)}
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                        <DeleteOptionDialog
+                          optionName={option.name}
+                          onDelete={() => deleteOption(option.id)}
+                        />
                       </div>
                     </div>
                   </CardContent>
