@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Checkbox } from './ui/checkbox';
 import { Card, CardContent } from './ui/card';
-import { Label } from './ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { Info } from 'lucide-react';
 
@@ -51,39 +50,33 @@ export function OptionsSelector({ options, selectedOptions, onToggleOption }: Op
                 onClick={(e) => handleCardClick(option, e)}
               >
                 <CardContent className="p-4">
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-center gap-4">
                     <Checkbox
                       id={option.id}
                       checked={isSelected}
                       onCheckedChange={() => onToggleOption(option.id)}
                       onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                      className="mt-0.5"
                     />
                     
-                    <div className="flex-1 min-w-0">
-                      <Label
-                        htmlFor={option.id}
-                        className="cursor-pointer"
+                    <label
+                      htmlFor={option.id}
+                      className="flex-1 min-w-0 cursor-pointer flex items-center gap-2"
+                    >
+                      <div className="text-base font-medium text-foreground">{option.name}</div>
+                      <button
+                        className="info-icon p-1 hover:bg-primary/10 rounded transition-colors"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedOptionForDetails(option);
+                        }}
+                        type="button"
                       >
-                        <div className="flex items-start justify-between gap-4">
-                          <div className="flex items-center gap-2 flex-1">
-                            <div className="text-foreground">{option.name}</div>
-                            <button
-                              className="info-icon p-1 hover:bg-primary/10 rounded transition-colors"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setSelectedOptionForDetails(option);
-                              }}
-                              type="button"
-                            >
-                              <Info className="w-4 h-4 text-primary" />
-                            </button>
-                          </div>
-                          <div className="text-primary shrink-0">
-                            + R$ {option.price.toFixed(2)}
-                          </div>
-                        </div>
-                      </Label>
+                        <Info className="w-4 h-4 text-primary" />
+                      </button>
+                    </label>
+                    
+                    <div className="text-base font-medium text-foreground shrink-0">
+                      + R$ {option.price.toFixed(2)}
                     </div>
                   </div>
                 </CardContent>
@@ -109,7 +102,7 @@ export function OptionsSelector({ options, selectedOptions, onToggleOption }: Op
               <p className="text-muted-foreground">
                 Valor adicional:
               </p>
-              <p className="text-primary mt-1">
+              <p className="font-medium text-foreground mt-1">
                 R$ {selectedOptionForDetails?.price.toFixed(2)}
               </p>
             </div>

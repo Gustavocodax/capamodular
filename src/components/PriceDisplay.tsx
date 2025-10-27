@@ -13,7 +13,7 @@ export function PriceDisplay({ total, selectedItems }: PriceDisplayProps) {
       <CardHeader>
         <CardTitle className="text-primary">Resumo do Orçamento</CardTitle>
       </CardHeader>
-      
+
       <CardContent className="space-y-6">
         <div className="space-y-3">
           {selectedItems.length > 0 ? (
@@ -27,7 +27,7 @@ export function PriceDisplay({ total, selectedItems }: PriceDisplayProps) {
                 className="flex justify-between items-center"
               >
                 <span className="text-sm">{item.name}</span>
-                <span className="text-sm text-primary">
+                <span className="text-sm text-foreground">
                   R$ {item.price.toFixed(2)}
                 </span>
               </motion.div>
@@ -43,24 +43,18 @@ export function PriceDisplay({ total, selectedItems }: PriceDisplayProps) {
           <>
             <Separator />
 
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Subtotal:</span>
-                <span className="text-sm text-primary">R$ {total.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-muted-foreground">Total:</span>
-                <motion.div
-                  key={total}
-                  initial={{ scale: 1.1 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <span className="text-2xl text-primary">
-                    R$ {total.toFixed(2)}
-                  </span>
-                </motion.div>
-              </div>
+            <div className="flex justify-between items-center">
+              <span className="text-muted-foreground">Total:</span>
+              <motion.div
+                key={total}
+                initial={{ scale: 1.1 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.2 }}
+              >
+                <span className="text-2xl font-semibold" style={{ color: '#16a34a' }}>
+                  R$ {total.toFixed(2)}
+                </span>
+              </motion.div>
             </div>
           </>
         )}
