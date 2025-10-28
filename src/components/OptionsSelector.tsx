@@ -58,10 +58,7 @@ export function OptionsSelector({ options, selectedOptions, onToggleOption }: Op
                       onClick={(e: React.MouseEvent) => e.stopPropagation()}
                     />
                     
-                    <label
-                      htmlFor={option.id}
-                      className="flex-1 min-w-0 cursor-pointer flex items-center gap-2"
-                    >
+                    <div className="flex-1 min-w-0 flex items-center gap-2">
                       <div className="text-base font-medium text-foreground">{option.name}</div>
                       <button
                         className="info-icon p-1 hover:bg-primary/10 rounded transition-colors"
@@ -73,7 +70,7 @@ export function OptionsSelector({ options, selectedOptions, onToggleOption }: Op
                       >
                         <Info className="w-4 h-4 text-primary" />
                       </button>
-                    </label>
+                    </div>
                     
                     <div className="text-base font-medium text-foreground shrink-0">
                       + R$ {option.price.toFixed(2)}

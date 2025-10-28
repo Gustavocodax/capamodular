@@ -1,10 +1,12 @@
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2, LogOut } from 'lucide-react';
 import { AddOptionDialog } from './AddOptionDialog';
 import { EditOptionDialog } from './EditOptionDialog';
 import { DeleteOptionDialog } from './DeleteOptionDialog';
 import { useOptions } from '../hooks/useOptions';
+import { authService } from '../services/authService';
+import { Logo } from './Logo';
 
 interface AdminPageProps {
   onBack: () => void;
@@ -25,18 +27,31 @@ export function AdminPage({ onBack }: AdminPageProps) {
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
-        {/* Header */}
+        {/* Logo e Botões */}
         <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="mb-2 text-primary">Gerenciar Opções</h1>
-            <p className="text-muted-foreground">
-              Adicione, edite ou remova opções do configurador
-            </p>
+          <Logo size="md" />
+          <div className="flex gap-2">
+            <Button onClick={onBack} variant="outline" className="gap-2">
+              <ArrowLeft className="w-4 h-4" />
+              Voltar ao Configurador
+            </Button>
+            <Button
+              onClick={() => authService.logout()}
+              variant="outline"
+              className="gap-2"
+            >
+              <LogOut className="w-4 h-4" />
+              Sair
+            </Button>
           </div>
-          <Button onClick={onBack} variant="outline" className="gap-2">
-            <ArrowLeft className="w-4 h-4" />
-            Voltar ao Configurador
-          </Button>
+        </div>
+
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="mb-2 text-primary">Gerenciar Opções</h1>
+          <p className="text-muted-foreground">
+            Adicione, edite ou remova opções do configurador
+          </p>
         </div>
 
         {/* Add Button */}

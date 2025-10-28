@@ -1,17 +1,36 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { OptionsSelector } from './components/OptionsSelector';
 import { PriceDisplay } from './components/PriceDisplay';
 import { ThemeToggle } from './components/ThemeToggle';
 import { AdminPage } from './components/AdminPage';
+import { LoginPage } from './components/LoginPage';
 import { GalaxyBackground } from './components/GalaxyBackground';
-import { Button } from './components/ui/button';
-import { Settings, Loader2 } from 'lucide-react';
+import { Logo } from './components/Logo';
+import { Loader2 } from 'lucide-react';
 import { useOptions } from './hooks/useOptions';
+import { useAuth } from './hooks/useAuth';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<'configurator' | 'admin'>('configurator');
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  
+  const { user, loading: authLoading } = useAuth();
+
+  // Detectar rota pela URL
+  useEffect(() => {
+    const checkRoute = () => {
+      const hash = window.location.hash.slice(1); // Remove o #
+      if (hash === '/admin') {
+        setCurrentPage('admin');
+      } else {
+        setCurrentPage('configurator');
+      }
+    };
+
+    checkRoute();
+    window.addEventListener('hashchange', checkRoute);
+    return () => window.removeEventListener('hashchange', checkRoute);
+  }, []);
+
   // Buscar opções do Firebase
   const { options: availableOptions, loading, error } = useOptions();
 
@@ -36,11 +55,37 @@ export default function App() {
     return selectedItems.reduce((sum, item) => sum + item.price, 0);
   }, [selectedItems]);
 
-  if (currentPage === 'admin') {
+  // Loading da autenticação
+  if (authLoading) {
     return (
       <>
         <GalaxyBackground />
-        <AdminPage onBack={() => setCurrentPage('configurator')} />
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </>
+    );
+  }
+
+  // Se está na página admin mas não está logado, mostra login
+  if (currentPage === 'admin' && !user) {
+    return (
+      <>
+        <GalaxyBackground />
+        <LoginPage />
+      </>
+    );
+  }
+
+  // Se está na página admin e está logado, mostra admin
+  if (currentPage === 'admin' && user) {
+    return (
+      <>
+        <GalaxyBackground />
+        <AdminPage onBack={() => {
+          window.location.hash = '#/';
+          setCurrentPage('configurator');
+        }} />
       </>
     );
   }
@@ -51,15 +96,8 @@ export default function App() {
       <div className="min-h-screen bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
           {/* Header */}
-          <div className="mb-8 flex items-end justify-end gap-2">
-            <Button
-              onClick={() => setCurrentPage('admin')}
-              variant="outline"
-              size="sm"
-            >
-              <Settings className="w-4 h-4 mr-2" />
-              Gerenciar Opções
-            </Button>
+          <div className="mb-8 flex items-center justify-between">
+            <Logo size="md" />
             <ThemeToggle />
           </div>
 
