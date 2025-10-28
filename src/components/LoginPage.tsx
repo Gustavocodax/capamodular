@@ -30,19 +30,20 @@ export function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative z-10">
-      <Card className="shadow-2xl" style={{ width: '600px', maxWidth: '90vw' }}>
-        <CardHeader className="text-center space-y-4 pb-4">
+      <div className="w-full" style={{ maxWidth: '28rem' }}>
+        <Card>
+        <CardHeader className="text-center space-y-4">
           <div className="mx-auto">
-            <Logo size="md" />
+            <Logo size="lg" />
           </div>
           <div>
-            <CardTitle className="text-2xl">Área Administrativa</CardTitle>
-            <CardDescription className="mt-2">
+            <CardTitle>Área Administrativa</CardTitle>
+            <CardDescription>
               Faça login para gerenciar as opções
             </CardDescription>
           </div>
         </CardHeader>
-        <CardContent className="pt-2">
+        <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -78,7 +79,7 @@ export function LoginPage() {
               </div>
             )}
 
-            <Button type="submit" className="w-full h-12" disabled={loading}>
+            <Button type="submit" className="w-full" disabled={loading}>
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -91,6 +92,7 @@ export function LoginPage() {
           </form>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }
